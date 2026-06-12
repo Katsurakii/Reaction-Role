@@ -1643,7 +1643,7 @@ dependencies = [
 
 [[package]]
 name = "reaction-role"
-version = "1.0.28"
+version = "1.0.29"
 dependencies = [
  "anyhow",
  "bot",
