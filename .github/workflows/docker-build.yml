@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -12,5 +16,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Docker Image Build
-        run: docker build -t reaction-role:local .
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Setup Image Name
+        run: echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/reaction-role" >> $GITHUB_ENV
+
+      - name: Docker Image Build (versioned + latest)
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} .
+          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
+
+      - name: Docker Image Push (versioned)
+        run: docker push $IMAGE_NAME:${{ github.sha }} 
+        
+      - name: Docker Image Push (latest)
+        run: docker push $IMAGE_NAME:latest
