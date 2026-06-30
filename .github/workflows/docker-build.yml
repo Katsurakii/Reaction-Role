@@ -20,15 +20,15 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Setup Image Name
-        run: echo "IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/reaction-role" >> $GITHUB_ENV
+        run: echo "IMAGE_NAME=ghcr.io/katsurakii/reaction-role" >> $GITHUB_ENV
 
       - name: Docker Image Build (versioned + latest)
         run: |
-          docker build -t $IMAGE_NAME:${{ github.sha }} .
-          docker tag $IMAGE_NAME:${{ github.sha }} $IMAGE_NAME:latest
+          docker build -t $IMAGE_NAME:${{ github.run_number }} .
+          docker tag $IMAGE_NAME:${{ github.run_number }} $IMAGE_NAME:latest
 
       - name: Docker Image Push (versioned)
-        run: docker push $IMAGE_NAME:${{ github.sha }} 
+        run: docker push $IMAGE_NAME:${{ github.run_number }} 
         
       - name: Docker Image Push (latest)
         run: docker push $IMAGE_NAME:latest
