@@ -12,7 +12,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show repo files
-        run: |
-          pwd
-          ls -lah
+      - name: Docker Image Build
+        run: docker build -t reaction-role:local .
