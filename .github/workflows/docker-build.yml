@@ -1,0 +1,10 @@
+name: Build & Publish Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
